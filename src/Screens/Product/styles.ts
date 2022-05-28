@@ -40,6 +40,37 @@ export const PickImageButton = styled(Button)`
   margin-left: ${RFValue(32)}px;
 `;
 
+export const Form = styled.View`
+  width: 100%;
+  padding: ${RFValue(24)}px;
+`;
+
+export const Label = styled.Text`
+  font-size: ${RFValue(14)}px;
+  font-family: ${({ theme }) => theme.Fonts.TEXT};
+  color: ${({ theme }) => theme.Colors.SECONDARY_900};
+  margin-bottom: ${RFValue(12)}px;
+`;
+
+export const InputGroup = styled.View`
+  width: 100%;
+  margin-bottom: ${RFValue(16)}px;
+`;
+
+export const InputGroupHeader = styled.View`
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+`;
+
+export const MaxCharcteres = styled.Text`
+  font-size: ${RFValue(10)}px;
+  font-family: ${({ theme }) => theme.Fonts.TEXT};
+  color: ${({ theme }) => theme.Colors.SECONDARY_900};
+  margin-bottom: ${RFValue(12)}px;
+`;
+
 export const Header = styled(LinearGradient).attrs(({ theme }) => ({
   colors: theme.Colors.GRADIENT,
 }))`

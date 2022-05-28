@@ -10,6 +10,7 @@ import { AuthProvider } from "@Hooks/Auth";
 
 import { SignIn } from "@Screens/SignIn";
 import { Product } from "@Screens/Product";
+import { Home } from "@Screens/Home";
 import * as SplashScreen from "expo-splash-screen";
 
 const App = () => {
@@ -32,7 +33,7 @@ const App = () => {
         <StatusBar style={"light"} translucent backgroundColor="transparent" />
 
         <AuthProvider>
-          <Product />
+          <Home />
         </AuthProvider>
       </GestureHandlerRootView>
     </ThemeProvider>

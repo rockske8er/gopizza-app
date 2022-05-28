@@ -25,8 +25,3 @@ export const PlaceholderTitle = styled.Text`
     color: ${theme.Colors.SECONDARY_900};
   `}
 `;
-
-export const Upload = styled.View`
-  width: 100%;
-  flex-direction: row;
-`;
