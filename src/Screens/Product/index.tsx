@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Alert, Platform } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Alert, Platform, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import * as ImagePicker from "expo-image-picker";
 import Firestore from "@react-native-firebase/firestore";
@@ -25,8 +25,23 @@ import { Input } from "@Components/Input";
 import { Button } from "@Components/Button";
 import { BackButton } from "@Components/BackButton";
 import { Photo } from "@Components/Photo";
+import { ProductProps } from "@Components/ProductCard";
+import { useNavigation, useRoute } from "@react-navigation/native";
+
+import { ProductNavigationProps } from "@Types/navigation";
+
+type PizzaResponse = ProductProps & {
+  photo_path: string;
+  photo_url: string;
+  price_size: {
+    p: string;
+    m: string;
+    g: string;
+  };
+};
 
 const Product = () => {
+  const [photoPath, setPhotoPath] = useState("");
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -34,6 +49,14 @@ const Product = () => {
   const [priceSizeM, setPriceSizeM] = useState("");
   const [priceSizeG, setPriceSizeG] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const route = useRoute();
+  const { goBack, navigate } = useNavigation();
+  const { id } = route.params as ProductNavigationProps;
+
+  const handleGoBack = () => {
+    goBack();
+  };
 
   const handlePickerImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -79,29 +102,70 @@ const Product = () => {
         photo_url: photoUrl,
         photo_path: referenceImage.fullPath,
       })
-      .then(() => Alert.alert("Cadastro", "Cadastrado com sucesso"))
+      .then(() => {
+        navigate("home");
+      })
       .catch(() => Alert.alert("Cadastro", "nao foi possivel com sucesso"))
       .finally(() => setIsLoading(false));
   };
+
+  const handleRemove = () => {
+    Firestore()
+      .collection("pizzas")
+      .doc(id)
+      .delete()
+      .then(() => {
+        Storage()
+          .ref(photoPath)
+          .delete()
+          .then(() => navigate("home"));
+      });
+  };
+
+  useEffect(() => {
+    if (id) {
+      Firestore()
+        .collection("pizzas")
+        .doc(id)
+        .get()
+        .then((response) => {
+          const product = response.data() as PizzaResponse;
+          setName(product.name);
+          setImage(product.photo_url);
+          setDescription(product.description);
+          setPriceSizeP(product.price_size.p);
+          setPriceSizeM(product.price_size.m);
+          setPriceSizeG(product.price_size.g);
+          setPhotoPath(product.photo_path);
+        });
+    }
+  }, [id]);
 
   return (
     <Container behavior={Platform.OS === "ios" ? "padding" : undefined}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Header>
-          <BackButton />
-          <Title>Cadastrar</Title>
-          <DeleteButton>
-            <DeleteButtonLabel>Deletar</DeleteButtonLabel>
-          </DeleteButton>
+          <BackButton onPress={handleGoBack} />
+          <Title>{id ? name : "Cadastrar"}</Title>
+
+          {!id ? (
+            <View style={{ width: 20 }} />
+          ) : (
+            <DeleteButton onPress={handleRemove}>
+              <DeleteButtonLabel>Deletar</DeleteButtonLabel>
+            </DeleteButton>
+          )}
         </Header>
 
         <Upload>
           <Photo uri={image} />
-          <PickImageButton
-            title="Carregar"
-            type="secondary"
-            onPress={handlePickerImage}
-          />
+          {!id && (
+            <PickImageButton
+              title="Carregar"
+              type="secondary"
+              onPress={handlePickerImage}
+            />
+          )}
         </Upload>
 
         <Form>
@@ -143,11 +207,13 @@ const Product = () => {
             />
           </InputGroup>
 
-          <Button
-            title="Cadastrar pizza"
-            isLoading={isLoading}
-            onPress={handleAdd}
-          />
+          {!id && (
+            <Button
+              title="Cadastrar pizza"
+              isLoading={isLoading}
+              onPress={handleAdd}
+            />
+          )}
         </Form>
       </ScrollView>
     </Container>

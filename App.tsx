@@ -8,10 +8,11 @@ import { ThemeProvider } from "styled-components/native";
 import Theme from "@Theme/index";
 import { AuthProvider } from "@Hooks/Auth";
 
-import { SignIn } from "@Screens/SignIn";
-import { Product } from "@Screens/Product";
-import { Home } from "@Screens/Home";
 import * as SplashScreen from "expo-splash-screen";
+
+import { AppRoutes } from "@Routes/index";
+
+import { Order } from "@Screens/Order";
 
 const App = () => {
   SplashScreen.preventAutoHideAsync();
@@ -33,7 +34,7 @@ const App = () => {
         <StatusBar style={"light"} translucent backgroundColor="transparent" />
 
         <AuthProvider>
-          <Home />
+          <Order />
         </AuthProvider>
       </GestureHandlerRootView>
     </ThemeProvider>

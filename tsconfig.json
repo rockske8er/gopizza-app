@@ -9,6 +9,8 @@
       "@Screens/*":[ "./src/Screens/*"],
       "@Theme/*":[ "./src/Theme/*"],
       "@Hooks/*":[ "./src/Hooks/*"],
+      "@Routes/*":[ "./src/Routes/*"],
+      "@Types/*":[ "./src/@types/*"],
     }
   },
 }
