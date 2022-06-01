@@ -1,7 +1,7 @@
+import styled from "styled-components/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { getStatusBarHeight } from "react-native-iphone-x-helper";
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
-import styled from "styled-components/native";
 
 export const Container = styled.KeyboardAvoidingView`
   flex: 1;
