@@ -12,8 +12,8 @@ const StackRoutes = () => {
           headerShown: false,
         }}
       >
-        <Screen name="home" component={Home} />
-        <Screen name={"product"} component={Product} />
+        <Screen name={"Home"} component={Home} />
+        <Screen name={"Product"} component={Product} />
       </Group>
     </Navigator>
   );

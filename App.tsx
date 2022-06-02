@@ -12,8 +12,6 @@ import * as SplashScreen from "expo-splash-screen";
 
 import { AppRoutes } from "@Routes/index";
 
-import { Order } from "@Screens/Order";
-
 const App = () => {
   SplashScreen.preventAutoHideAsync();
 
@@ -34,7 +32,7 @@ const App = () => {
         <StatusBar style={"light"} translucent backgroundColor="transparent" />
 
         <AuthProvider>
-          <Order />
+          <AppRoutes />
         </AuthProvider>
       </GestureHandlerRootView>
     </ThemeProvider>
