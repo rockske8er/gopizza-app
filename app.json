@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "GoPizzaMobile",
-    "slug": "GoPizzaMobile",
+    "name": "Go Pizza",
+    "slug": "go_pizza",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"

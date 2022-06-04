@@ -30,7 +30,6 @@ const App = () => {
     <ThemeProvider theme={Theme}>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <StatusBar style={"light"} translucent backgroundColor="transparent" />
-
         <AuthProvider>
           <AppRoutes />
         </AuthProvider>

@@ -1,14 +1,32 @@
-import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import React, { useEffect, useState } from "react";
+import { Platform } from "react-native";
+import { useTheme } from "styled-components/native";
 
+import Firestore from "@react-native-firebase/firestore";
+//Screens
 import { Home } from "@Screens/Home";
 import { Orders } from "@Screens/Orders";
-import { useTheme } from "styled-components/native";
-import { Platform } from "react-native";
-
+//Components
+import { BottomMenu } from "@Components/BottomMenu";
+//Navigation
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 const { Group, Navigator, Screen } = createBottomTabNavigator();
+
 const TabRoutes = () => {
+  const [notifications, setNotifications] = useState("0");
+
   const { Colors } = useTheme();
+
+  useEffect(() => {
+    const subscriber = Firestore()
+      .collection("orders")
+      .where("status", "==", "Pronto")
+      .onSnapshot((querySnapshot) => {
+        setNotifications(String(querySnapshot.docs.length));
+      });
+
+    return () => subscriber();
+  }, []);
 
   return (
     <Navigator>
@@ -24,8 +42,28 @@ const TabRoutes = () => {
           },
         }}
       >
-        <Screen name="Home" component={Home} />
-        <Screen name="Orders" component={Orders} />
+        <Screen
+          name="Home"
+          component={Home}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <BottomMenu title="Cardápio" color={color} />
+            ),
+          }}
+        />
+        <Screen
+          name="Orders"
+          component={Orders}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <BottomMenu
+                title="Pedidos"
+                color={color}
+                notifications={notifications}
+              />
+            ),
+          }}
+        />
       </Group>
     </Navigator>
   );

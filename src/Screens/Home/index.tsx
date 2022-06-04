@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FlatList, RectButton } from "react-native-gesture-handler";
 import { useTheme } from "styled-components/native";
@@ -20,12 +20,14 @@ import { Search } from "@Components/Search";
 import { ProductCard, ProductProps } from "@Components/ProductCard";
 import { Alert } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useAuth } from "@Hooks/Auth";
 
 const Home = () => {
   const [pizzas, setPizzas] = useState<ProductProps[]>([]);
   const [search, setSearch] = useState("");
   const { Colors } = useTheme();
   const { navigate } = useNavigation();
+  const { user, signOut } = useAuth();
 
   const getPizza = (name: string) => {
     const nameFormatted = name.toLocaleLowerCase().trim();
@@ -59,13 +61,14 @@ const Home = () => {
   };
 
   const handleOpen = (id: string) => {
-    navigate("product", {
+    const route = user?.isAdmin ? "Product" : "Order";
+    navigate(route, {
       id,
     });
   };
 
   const handleAdd = () => {
-    navigate("product", {});
+    navigate("Product", {});
   };
 
   useFocusEffect(
@@ -79,7 +82,7 @@ const Home = () => {
       <Header>
         <Greating>
           <GreatingEmoji source={happyIcon} />
-          <GreatingMessage>Olá {"Marcos"}</GreatingMessage>
+          <GreatingMessage>Olá {user?.name}</GreatingMessage>
         </Greating>
         <RectButton
           style={{
@@ -88,6 +91,7 @@ const Home = () => {
             justifyContent: "center",
             alignItems: "center",
           }}
+          onPress={signOut}
         >
           <MaterialIcons name="logout" size={24} color={Colors.TITLE} />
         </RectButton>
@@ -117,12 +121,13 @@ const Home = () => {
           marginHorizontal: 24,
         }}
       />
-
-      <AddProductButton
-        title="Cadastrar Pizza"
-        type="secondary"
-        onPress={handleAdd}
-      />
+      {user?.isAdmin && (
+        <AddProductButton
+          title="Cadastrar Pizza"
+          type="secondary"
+          onPress={handleAdd}
+        />
+      )}
     </Container>
   );
 };

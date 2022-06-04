@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacityProps, View } from "react-native";
+import { TouchableOpacityProps } from "react-native";
 
 import {
   Container,
@@ -8,22 +8,35 @@ import {
   Name,
   Status,
   StatusLabel,
+  StatusType,
 } from "./styles";
+
+export type OrderProps = {
+  id: string;
+  pizza: string;
+  photo: string;
+  status: StatusType;
+  table_number: string;
+  quantity: string;
+};
 
 type Props = TouchableOpacityProps & {
   index: number;
+  data: OrderProps;
 };
 
-const OrderCard = ({ index, ...rest }: Props) => {
+const OrderCard = ({ index, data, ...rest }: Props) => {
   return (
     <Container index={index} {...rest}>
-      <Image source={{ uri: "https://github.com/markus90souza.png" }} />
+      <Image source={{ uri: data.photo }} />
 
-      <Name>4 Queijos</Name>
+      <Name>{data.pizza}</Name>
 
-      <Description>Mesa 5 ● Qnt: 1</Description>
+      <Description>
+        Mesa {data.table_number} ● Qnt: {data.quantity}
+      </Description>
       <Status status="Preparando">
-        <StatusLabel status="Preparando">Preparando</StatusLabel>
+        <StatusLabel status={data.status}>{data.status}</StatusLabel>
       </Status>
     </Container>
   );
